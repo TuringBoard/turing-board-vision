@@ -1,4 +1,4 @@
-# Configuring the NVIDIA Jetson TX2 for OpenCV and pyrealsense2 with the Intel Realsense Depth Camera D435
+# Configuring the NVIDIA Jetson TX2's CUDA cores for OpenCV's dnn module and pyrealsense2 with the Intel Realsense Depth Camera D435
 
 Note: If done correctly, this procedure can be completed within 4.5 hours. 
 
