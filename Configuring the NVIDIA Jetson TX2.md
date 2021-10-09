@@ -25,34 +25,34 @@ This will install the following, among other things by default:
 Once flash is complete, clone the `librealsense` library. This library also contains the `pyrealsense` module. To do so, run the following commands: 
 
 ```bash
-sahaj@jetson-tx2:~$ cd ~
+$ cd ~
 
-sahaj@jetson-tx2:~$ sudo apt-get update && sudo apt-get -y upgrade
-sahaj@jetson-tx2:~$ sudo apt-get install -y --no-install-recommends \
+$ sudo apt-get update && sudo apt-get -y upgrade
+$ sudo apt-get install -y --no-install-recommends \
     python3 \
     python3-setuptools \
     python3-pip \
     python3-dev
 
 # Install the core packages required to build librealsense libs
-sahaj@jetson-tx2:~$ sudo apt-get install -y git libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
+$ sudo apt-get install -y git libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
 
 # Install Distribution-specific packages for Ubuntu 18
-sahaj@jetson-tx2:~$ sudo apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
+$ sudo apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 
-sahaj@jetson-tx2:~$ git clone https://github.com/IntelRealSense/librealsense.git
-sahaj@jetson-tx2:~$ cd ./librealsense
-sahaj@jetson-tx2:~/librealsense$ ./scripts/setup_udev_rules.sh
-sahaj@jetson-tx2:~/librealsense$ mkdir build && cd build
+$ git clone https://github.com/IntelRealSense/librealsense.git
+$ cd ./librealsense
+$ ./scripts/setup_udev_rules.sh
+$ mkdir build && cd build
 # Install CMake with Python bindings (that's what the -DBUILD flag is for)
 # see link: https://github.com/IntelRealSense/librealsense/tree/master/wrappers/python#building-from-source
-sahaj@jetson-tx2:~/librealsense/build$ cmake ../ -DBUILD_PYTHON_BINDINGS:bool=true
+$ cmake ../ -DBUILD_PYTHON_BINDINGS:bool=true
 ```
 
 Now export `pyrealsense2` to your `PYTHONPATH` in order for 'import pyrealsense2' to work.
 
 ```bash
-sahaj@jetson-tx2:~$ vim ~/.bashrc
+$ vim ~/.bashrc
 ```
 
 Append the document with the following line:
@@ -64,13 +64,13 @@ export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2
 Reload the `~/.bashrc` file in your terminal session:
 
 ```bash
-sahaj@jetson-tx2:~$ source ~/.bashrc
+$ source ~/.bashrc
 ```
 
 Test the import of `pyrealsense2` module on any python program.
 
 ```bash
-sahaj@jetson-tx2:~$ python3
+$ python3
 Python 3.6.9 (default, Jan 26 2021, 15:33:00) 
 [GCC 8.4.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
@@ -87,51 +87,51 @@ version 4.2.0 and up. So, we will switch to that branch after cloning the reposi
 But first, remove the 4.1.1 version of OpenCV that is already installed.
 
 ```bash
-sahaj@jetson-tx2:~$ sudo apt-get purge *libopencv*
+$ sudo apt-get purge *libopencv*
 ```
 
 Now, begin the installation.
 
 ```bash
-sahaj@jetson-tx2:~$ cd ~
-sahaj@jetson-tx2:~$ git clone https://github.com/opencv/opencv.git
-sahaj@jetson-tx2:~$ cd opencv
-sahaj@jetson-tx2:~/opencv$ git checkout 4.5.3
-sahaj@jetson-tx2:~/opencv$ cd ..
-sahaj@jetson-tx2:~$ git clone https://github.com/opencv/opencv_contrib.git
-sahaj@jetson-tx2:~$ cd opencv_contrib
-sahaj@jetson-tx2:~/opencv_contrib$ git checkout 4.5.3
-sahaj@jetson-tx2:~/opencv_contrib$ cd ..
+$ cd ~
+$ git clone https://github.com/opencv/opencv.git
+$ cd opencv
+$ git checkout 4.5.3
+$ cd ..
+$ git clone https://github.com/opencv/opencv_contrib.git
+$ cd opencv_contrib
+$ git checkout 4.5.3
+$ cd ..
 ```
 It is important that both `opencv` and `opencv_contrib` are in the same branch.
 
 Now, install the relevant dependencies to configure the OpenCV's "dnn" module for NVIDIA GPU.
 
 ```bash
-sahaj@jetson-tx2:~$ sudo apt-get update
-sahaj@jetson-tx2:~$ sudo apt-get upgrade
-sahaj@jetson-tx2:~$ sudo apt-get install build-essential cmake unzip pkg-config
-sahaj@jetson-tx2:~$ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
-sahaj@jetson-tx2:~$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev
-sahaj@jetson-tx2:~$ sudo apt-get install libv4l-dev libxvidcore-dev libx264-dev
-sahaj@jetson-tx2:~$ sudo apt-get install libgtk-3-dev
-sahaj@jetson-tx2:~$ sudo apt-get install libatlas-base-dev gfortran
-sahaj@jetson-tx2:~$ sudo apt-get install python3-dev
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install build-essential cmake unzip pkg-config
+$ sudo apt-get install libjpeg-dev libpng-dev libtiff-dev
+$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev
+$ sudo apt-get install libv4l-dev libxvidcore-dev libx264-dev
+$ sudo apt-get install libgtk-3-dev
+$ sudo apt-get install libatlas-base-dev gfortran
+$ sudo apt-get install python3-dev
 ```
 
 Configure a python virtual environment for best practices.
 
 ```bash
-sahaj@jetson-tx2:~$ wget https://bootstrap.pypa.io/get-pip.py
-sahaj@jetson-tx2:~$ sudo python3 get-pip.py
-sahaj@jetson-tx2:~$ sudo pip install virtualenv virtualenvwrapper
-sahaj@jetson-tx2:~$ sudo rm -rf ~/get-pip.py ~/.cache/pip
+$ wget https://bootstrap.pypa.io/get-pip.py
+$ sudo python3 get-pip.py
+$ sudo pip install virtualenv virtualenvwrapper
+$ sudo rm -rf ~/get-pip.py ~/.cache/pip
 ```
 
 Now, you need to update your `~/.bashrc` file so that it automatically loads `virtualenv/virtualenvwrapper` when you open up the terminal.
 
 ```bash
-sahaj@jetson-tx2:~$ vim ~/.bashrc
+$ vim ~/.bashrc
 ```
 
 Insert the following: 
@@ -146,20 +146,20 @@ source /usr/local/bin/virtualenvwrapper.sh
 Then reload the `~/.bashrc` file in your terminal session:
 
 ```bash
-sahaj@jetson-tx2:~$ source ~/.bashrc
+$ source ~/.bashrc
 ```
 
 Now create your python virtual environment:
 
 ```bash
-sahaj@jetson-tx2:~$ mkvirtualenv opencv_cuda -p python3
+$ mkvirtualenv opencv_cuda -p python3
 ```
 
 This will automatically start the virtual environment where you need to install `numpy`.
 
 ```bash
-(opencv_cuda) sahaj@jetson-tx2:~$ pip install numpy
-(opencv_cude) sahaj@jetson-tx2:~$ deactivate
+(opencv_cuda) $ pip install numpy
+(opencv_cude) $ deactivate
 ```
 
 Add the following lines to your `~/.bashrc` file:
@@ -171,7 +171,7 @@ export OPENBLAS_CORETYPE=ARMV8
 Then reload the `~/.bashrc` file in your terminal session:
 
 ```bash
-sahaj@jetson-tx2:~$ source ~/.bashrc
+$ source ~/.bashrc
 ```
 
 It is paramount that you determine your NVIDIA GPU architecture version, for the TX2, it's `6.2`. This is the value that will be used for the `-D CUDA_ARCH_BIN` flag. 
@@ -179,15 +179,15 @@ It is paramount that you determine your NVIDIA GPU architecture version, for the
 Now we will start building the library. First, make sure you are in the virtual environment. 
 
 ```bash
-sahaj@jetson-tx2:~$ workon opencv_python
+$ workon opencv_python
 ```
 
 Navigate to the `opencv` directory. And start the recipe.
 
 ```bash
-(opencv_cuda) sahaj@jetson-tx2:~$ cd ~/opencv
-(opencv_cuda) sahaj@jetson-tx2:~/opencv$ mkdir build && cd build
-(opencv_cuda) sahaj@jetson-tx2:~/opencv/build$ cmake -D CMAKE_BUILD_TYPE=RELEASE \
+(opencv_cuda) $ cd ~/opencv
+(opencv_cuda) $ mkdir build && cd build
+(opencv_cuda) $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D INSTALL_PYTHON_EXAMPLES=ON \
 	-D INSTALL_C_EXAMPLES=OFF \
@@ -231,16 +231,16 @@ file(READ "${CUDNN_INCLUDE_DIR}/cudnn_version.h" CUDNN_H_CONTENTS)
 Then start the installation.
 
 ```bash
-(opencv_cuda) sahaj@jetson-tx2:~/opencv/build$ make -j4
-(opencv_cuda) sahaj@jetson-tx2:~/opencv/build$ sudo make install
-(opencv_cuda) sahaj@jetson-tx2:~/opencv/build$ sudo ldconfig
-(opencv_cuda) sahaj@jetson-tx2:~/opencv/build$ deactivate
+(opencv_cuda) $ make -j4
+(opencv_cuda) $ sudo make install
+(opencv_cuda) $ sudo ldconfig
+(opencv_cuda) $ deactivate
 ```
 
 We are almost done, now we have to `sym-link` the OpenCV library to our python virtual environment. First, confirm the location of the OpenCV bindings. It should be in `/usr/local/lib/python3.6/site-packages/cv2/python-3.51`. You may confirm it by using the `ls` command: 
 
 ```bash
-sahaj@jetson-tx2:~$ ls -l /usr/local/lib/python3.6/site-packages/cv2/python-3.6
+$ ls -l /usr/local/lib/python3.6/site-packages/cv2/python-3.6
 total 9996
 -rw-r--r-
 1 root staff 10232360 Oct 8 21:09 cv2.cpython-36m-aarch64-linux-gnu.so
@@ -249,15 +249,15 @@ total 9996
 Now that you have confirmed the location of your OpenCV bindings, you can `sym-link` them using the `ln` command as: 
 
 ```bash
-sahaj@jetson-tx2:~$ cd ~/.virtualenvs/opencv_cuda/lib/python3.6/site-packages/
-sahaj@jetson-tx2:~/.virtualenvs/opencv_cuda/lib/python3.6/site-packages/$ ln -s /usr/local/lib/python3.6/site-packages/cv2/python-3.6/cv2.cpython-36m-aarch64-linux-gnu.so cv2.so
+$ cd ~/.virtualenvs/opencv_cuda/lib/python3.6/site-packages/
+$ ln -s /usr/local/lib/python3.6/site-packages/cv2/python-3.6/cv2.cpython-36m-aarch64-linux-gnu.so cv2.so
 ```
 
 ### Verifying installation of OpenCV
 
 ```bash
-sahaj@jetson-tx2:~$ workon opencv_cuda
-(opencv_cuda) sahaj@jetson-tx2:~$ python3
+$ workon opencv_cuda
+(opencv_cuda) $ python3
 Python 3.6.9 (default, Jan 26 2021, 15:33:00) 
 [GCC 8.4.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
