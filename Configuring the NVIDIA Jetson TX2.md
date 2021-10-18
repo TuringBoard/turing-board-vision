@@ -266,3 +266,25 @@ Type "help", "copyright", "credits" or "license" for more information.
 '4.5.3'
 ```
 
+### Installing `numba` and `llvmlite`
+
+To install `numba`, you will require an installation of `llvmlite` and to install `llvmlite`, you will require an installation of `llvm` v9.0, or v 10.0.x.
+
+```bash
+(opencv_cuda) $ sudo apt-get install llvm-9
+(opencv_cuda) $ sudo apt-get install llvmlite=0.31.0
+
+# Now re-link "llvm-config"
+(opencv_cuda) $ sudo ln -s /usr/bin/llvm-config-9 /usr/bin/llvm-config
+(opencv_cuda) $ pip install numba
+
+# Verify install
+(opencv_cuda) $ python3
+Python 3.6.9 (default, Jan 26, 2021, 15:33:00)
+[GCC 8.4.0] Oon linux
+Type "help", "copyright", "credits" or "license" for more information. 
+>>> import numba
+>>> numba.__version__
+'0.53.1'
+```
+
