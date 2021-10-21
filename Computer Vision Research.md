@@ -12,7 +12,7 @@ YOLO is much faster with a performance up to 40-90 FPS on a Titan X GPU, worse o
 
 SSDs, originally developed by Google, are a balance between the two with a 22-45 FPS throughput. 
 
-Deploying an SSD-MobileNet V2 [(Howard et al., 2017)](https://arxiv.org/pdf/1704.04861.pdf) model on a 91 class COCO dataset seemed to perform the best with sub-60 FPS speeds. To do so, we must first install [jetson-inference](https://github.com/dusty-nv/jetson-inference), a realtime DNN vision library for NVIDIA Jetson Nano/TX1/TX2/Xavier NX/AGX Xavier. 
+Deploying an SSD-MobileNet V2 [(Howard et al., 2017)](https://arxiv.org/pdf/1704.04861.pdf) model on a 91 class COCO dataset* seemed to perform the best with sub-60 FPS speeds. To do so, we must first install [jetson-inference](https://github.com/dusty-nv/jetson-inference), a realtime DNN vision library for NVIDIA Jetson Nano/TX1/TX2/Xavier NX/AGX Xavier. 
 
 ```bash
 $ cd ~
@@ -43,6 +43,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 > You can try running a test example using the `MobileNetSSDModule.py` file.
+
+---
+
+*`~/jetson-inference/data/networks/SSD-Mobilenet-v2/ssd_coco_labels.txt` contains the 91 class labels. Furthermore, the object detection model is in the same directory, it's the `.uff` file.   
 
 Sources: 
 
