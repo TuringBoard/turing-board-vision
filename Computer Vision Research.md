@@ -12,7 +12,7 @@ YOLO is much faster with a performance up to 40-90 FPS on a Titan X GPU, worse o
 
 SSDs, originally developed by Google, are a balance between the two with a 22-45 FPS throughput. 
 
-Deploying an SSD-MobileNet V2 [(Howard et al., 2017)](https://arxiv.org/pdf/1704.04861.pdf) model on a 91 class COCO dataset* seemed to perform the best with sub-60 FPS speeds. To do so, we must first install [jetson-inference](https://github.com/dusty-nv/jetson-inference), a realtime DNN vision library for NVIDIA Jetson Nano/TX1/TX2/Xavier NX/AGX Xavier. 
+Deploying an SSD-MobileNet V2 [(Howard et al., 2017)](https://arxiv.org/pdf/1704.04861.pdf) model on a 91 class COCO dataset<sup>[1]</sup> seemed to perform the best with sub-60 FPS speeds. To do so, we must first install [jetson-inference](https://github.com/dusty-nv/jetson-inference), a realtime DNN vision library for NVIDIA Jetson Nano/TX1/TX2/Xavier NX/AGX Xavier. 
 
 ```bash
 $ cd ~
@@ -39,14 +39,30 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> import jetson.inference
 >>> import jetson.utils
 >>> 
-# No NoModuleFound error indicates successful installation
+# Absence of NoModuleFound error indicates successful installation
 ```
 
 > You can try running a test example using the `MobileNetSSDModule.py` file.
 
+### Pathfinding for the Summon feature
+
+> 10:05 PM, Sun Oct 24, 2021
+
+Board generates a trapezoidal trazectory map infront of it with a progressive width equal to its own width plus some padding width, if object detected, within the trajectory, avoid object. 
+
+The path finding algorithm may draw inspiration from many existing projects. For example, the [Starship](https://www.starship.xyz/) autonomous delivery vehicle employs it's own flavor of autonomous driving on non-road paths. Here are some videos of some employees of this company talking about the software behind their product: 
+
+- Time: 13:25 - 18:34 [Kristjan Korjus (Starship Technologies) KEYNOTE: Building Smart and Reliable Self-Driving Robots](https://youtu.be/u1awz4Auj-c?t=805)
+- Time: 5:00 - 34:40 [Ahti Heinla, Starship: "Building self-driving delivery robots"](https://www.youtube.com/watch?v=aM9-bRGbmPQ?t=300)
+
+Sources: 
+
+- [github.com/dusty-nv/jetson-inference](https://github.com/dusty-nv/jetson-inference)
+- [Object detection with deep learning and OpenCV](https://www.pyimagesearch.com/2017/09/11/object-detection-with-deep-learning-and-opencv/)
+
 ---
 
-*`~/jetson-inference/data/networks/SSD-Mobilenet-v2/ssd_coco_labels.txt` contains the 91 class labels. Furthermore, the object detection model is in the same directory, it's the `.uff` file.   
+<sup>[1]</sup> `~/jetson-inference/data/networks/SSD-Mobilenet-v2/ssd_coco_labels.txt` contains the 91 class labels. Furthermore, the object detection model is in the same directory, it's the `.uff` file.   
 
 Sources: 
 
