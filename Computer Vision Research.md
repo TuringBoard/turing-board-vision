@@ -50,7 +50,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 > 10:05 PM, Sun Oct 24, 2021
 
-Board generates a trapezoidal trazectory map infront of it with a progressive width equal to its own width plus some padding width, if object detected, within the trajectory, avoid object. 
+Board generates a trapezoidal trajectory map infront of it with a progressive width equal to its own width plus some padding width, if object detected, within the trajectory, avoid object. 
 
 The path finding algorithm may draw inspiration from many existing projects. For example, the [Starship](https://www.starship.xyz/) autonomous delivery vehicle employs it's own flavor of autonomous driving on non-road paths. Here are some videos of some employees of this company talking about the software behind their product: 
 
