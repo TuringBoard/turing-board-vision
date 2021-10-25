@@ -44,6 +44,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 > You can try running a test example using the `MobileNetSSDModule.py` file.
 
+---
+
 ### Pathfinding for the Summon feature
 
 > 10:05 PM, Sun Oct 24, 2021
@@ -55,7 +57,9 @@ The path finding algorithm may draw inspiration from many existing projects. For
 - Time: 13:25 - 18:34 [Kristjan Korjus (Starship Technologies) KEYNOTE: Building Smart and Reliable Self-Driving Robots](https://youtu.be/u1awz4Auj-c?t=805)
 - Time: 5:00 - 34:40 [Ahti Heinla, Starship: "Building self-driving delivery robots"](https://www.youtube.com/watch?v=aM9-bRGbmPQ?t=300)
 
-Sources: 
+---
+
+##### Sources: 
 
 - [github.com/dusty-nv/jetson-inference](https://github.com/dusty-nv/jetson-inference)
 - [Object detection with deep learning and OpenCV](https://www.pyimagesearch.com/2017/09/11/object-detection-with-deep-learning-and-opencv/)
