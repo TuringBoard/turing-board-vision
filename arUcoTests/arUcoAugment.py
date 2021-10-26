@@ -46,7 +46,7 @@ def main():
     camera_matrix = np.loadtxt("cameraMatrix_webcam.txt", delimiter=',')
     camera_distortion = np.loadtxt(
         "cameraDistortion_webcam.txt", delimiter=',')
-    imgAug = cv2.imread("markers/star.jpeg")
+    imgAug = cv2.imread("markers/pic.png")
     while True:
         _, img = cap.read()
         _, img2 = cap2.read()
@@ -114,6 +114,7 @@ def main():
         cv2.imshow("Augment", i)
         cv2.imshow("BGR", img2)
         cv2.imshow("arUco", imgGray)
+
         key = cv2.waitKey(1)
         if key == 27 or key == ord('q'):
             cv2.destroyAllWindows()
