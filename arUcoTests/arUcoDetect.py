@@ -38,8 +38,8 @@ def main():
         rectY = int((720/2)-100)
         rectW = int(rectX + 200)
         rectH = int(rectY + 200)
-        cv2.rectangle(imgGray, (rectX, rectY),
-                      (rectW, rectH), (255, 255, 255), 2)
+        cv2.rectangle(imgGray, (rectX, 0),
+                      (rectW, 720), (255, 255, 255), 2)
 
         if len(corners) > 0:
             ret = aruco.estimatePoseSingleMarkers(
