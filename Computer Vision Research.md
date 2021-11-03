@@ -50,7 +50,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 > 10:05 PM, Sun Oct 24, 2021
 
-Board generates a trapezoidal trajectory map infront of it with a progressive width equal to its own width plus some padding width, if object detected, within the trajectory, avoid object. 
+Board generates a trapezoidal trajectory map infront of it with a progressive width equal to its own width plus some padding width, if object detected within the trajectory, avoid object. 
 
 The path finding algorithm may draw inspiration from many existing projects. For example, the [Starship](https://www.starship.xyz/) autonomous delivery vehicle employs it's own flavor of autonomous driving on non-road paths. Here are some videos of some employees of this company talking about the software behind their product: 
 
@@ -67,8 +67,3 @@ The path finding algorithm may draw inspiration from many existing projects. For
 ---
 
 <sup>[1]</sup> `~/jetson-inference/data/networks/SSD-Mobilenet-v2/ssd_coco_labels.txt` contains the 91 class labels. Furthermore, the object detection model is in the same directory, it's the `.uff` file.   
-
-Sources: 
-
-- [github.com/dusty-nv/jetson-inference](https://github.com/dusty-nv/jetson-inference)
-- [Object detection with deep learning and OpenCV](https://www.pyimagesearch.com/2017/09/11/object-detection-with-deep-learning-and-opencv/)
