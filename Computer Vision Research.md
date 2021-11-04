@@ -57,6 +57,10 @@ The path finding algorithm may draw inspiration from many existing projects. For
 - Time: 13:25 - 18:34 [Kristjan Korjus (Starship Technologies) KEYNOTE: Building Smart and Reliable Self-Driving Robots](https://youtu.be/u1awz4Auj-c?t=805)
 - Time: 5:00 - 34:40 [Ahti Heinla, Starship: "Building self-driving delivery robots"](https://www.youtube.com/watch?v=aM9-bRGbmPQ?t=300)
 
+> 8:30 PM, Wed Nov 3, 2021
+
+Adding slides related to path finding from CSE 4360 - Robotics, Manfred Huber. See folder `/PathFindingSlides`.
+
 ---
 
 ##### Sources: 
