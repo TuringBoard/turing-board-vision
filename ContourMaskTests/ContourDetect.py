@@ -3,7 +3,7 @@ import numpy as np
 
 
 def main():
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(3)
     while True:
         _, frame = cap.read()
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
