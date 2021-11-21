@@ -2,6 +2,9 @@ import cv2
 import cv2.aruco as aruco
 import numpy as np
 import os
+import pyrealsense2
+
+from realsense_depth import *
 
 
 def findArucoMarkers(img, markerSize=6, totalMarkers=250, draw=True):
@@ -24,22 +27,29 @@ def findArucoMarkers(img, markerSize=6, totalMarkers=250, draw=True):
 
 
 def main():
-    cap = cv2.VideoCapture(2)
+    dc = DepthCamera()
+    # cap = cv2.VideoCapture(3)
     camera_matrix = np.loadtxt("cameraMatrix_webcam.txt", delimiter=',')
     camera_distortion = np.loadtxt(
         "cameraDistortion_webcam.txt", delimiter=',')
 
     while True:
-        _, img = cap.read()
+        ret, depth_frame, color_frame = dc.get_frame()
+
+        img = color_frame
         imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         corners, ids = findArucoMarkers(img)
 
-        rectX = int((1280/2)-100)
-        rectY = int((720/2)-100)
-        rectW = int(rectX + 200)
-        rectH = int(rectY + 200)
+
+        # Intel Realsense Resolution: 1920/1080
+        # MBP FaceTime camera Resolution: 1280/720
+        deadZoneWidth = 150
+        rectX = int((640/2)-(deadZoneWidth/2))
+        rectY = int((480/2)-(deadZoneWidth/2))
+        rectW = int(rectX + deadZoneWidth)
+        rectH = int(rectY + deadZoneWidth)
         cv2.rectangle(imgGray, (rectX, 0),
-                      (rectW, 720), (255, 255, 255), 2)
+                      (rectW, 480), (255, 255, 255), 2)
 
         if len(corners) > 0:
             ret = aruco.estimatePoseSingleMarkers(
@@ -55,14 +65,27 @@ def main():
                 x_mid = int(topLeft[0] + (width/2))
                 y_mid = int(topLeft[1] + (height/2))
 
-                if True:
-                    if x_mid < rectX:
-                        cv2.putText(imgGray, f'KEEP LEFT', (900, 80),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-                    elif x_mid > (rectX+200):
-                        cv2.putText(imgGray, f'KEEP RIGHT', (900, 80),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                distance = depth_frame[y_mid, x_mid]
+                cv2.circle(img, (x_mid, y_mid), 10, (0,0,255))
+                cv2.circle(imgGray, (x_mid, y_mid), 4, (0,0,255))
+                cv2.line(imgGray, (x_mid, 0), (x_mid, 480), (255,255,255), 1)
+                cv2.line(imgGray, (0, y_mid), (640, y_mid), (255,255,255), 1)
 
+                cv2.putText(imgGray, 'Distance: {}mm'.format(distance), (500, 100),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                if True:
+                    if distance > 500: 
+                        cv2.putText(imgGray, 'MOVE FORWARD'.format(distance), (500, 60),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
+                    if x_mid < rectX:
+                        cv2.putText(imgGray, f'KEEP LEFT', (500, 80),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), )
+                        
+                    elif x_mid > (rectX+deadZoneWidth):
+                        cv2.putText(imgGray, f'KEEP RIGHT', (500, 80),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                       
                 topRight = (int(topRight[0]), int(topRight[1]))
                 bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
                 bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
@@ -86,8 +109,8 @@ def main():
 
         cv2.namedWindow("BGR", cv2.WINDOW_NORMAL)
         cv2.namedWindow("arUco", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('BGR', 800, 450)
-        cv2.resizeWindow('arUco', 800, 450)
+        cv2.resizeWindow('BGR', 640, 480)
+        cv2.resizeWindow('arUco', 640, 480)
 
         cv2.imshow("BGR", img)
         cv2.imshow("arUco", imgGray)
