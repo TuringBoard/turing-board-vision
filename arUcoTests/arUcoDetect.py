@@ -43,8 +43,8 @@ def main():
         corners, ids = findArucoMarkers(img)
 
 
-        # Intel Realsense Resolution: 1920/1080
-        # MBP FaceTime camera Resolution: 1280/720
+        # Intel Realsense Resolution: 1920x1080
+        # MBP FaceTime camera Resolution: 1280x720
         deadZoneWidth = 150
         rectX = int((640/2)-(deadZoneWidth/2))
         rectY = int((480/2)-(deadZoneWidth/2))
