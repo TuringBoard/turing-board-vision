@@ -1,3 +1,5 @@
+# Author: Sahaj Amatya
+
 import cv2
 import cv2.aruco as aruco
 import numpy as np
@@ -64,26 +66,37 @@ def main():
                 height = int(abs(bottomLeft[1]-topLeft[1]))
                 x_mid = int(topLeft[0] + (width/2))
                 y_mid = int(topLeft[1] + (height/2))
-
-                distance = depth_frame[y_mid, x_mid]
+                storage = []
+                # print(topLeft[1], width)
+                for i in range(int(topLeft[0]+(width/4)), int(topRight[0]-(width/4))):
+                    for j in range(int(topLeft[1]+(height/4)), int(bottomLeft[1]-(height/4))):
+                        distance = depth_frame[j, i]
+                        if distance > 0: 
+                            storage.append(distance)
+                    
+                if storage != []: distance = int(min(storage)) + 10
+                else: distance = 0
+                # print(storage)
                 cv2.circle(img, (x_mid, y_mid), 10, (0,0,255))
                 cv2.circle(imgGray, (x_mid, y_mid), 4, (0,0,255))
                 cv2.line(imgGray, (x_mid, 0), (x_mid, 480), (255,255,255), 1)
                 cv2.line(imgGray, (0, y_mid), (640, y_mid), (255,255,255), 1)
 
-                cv2.putText(imgGray, 'Distance: {}mm'.format(distance), (500, 100),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                cv2.putText(imgGray, 'Optimized Distance: {}mm'.format(distance), (450, 100),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255, 255, 255), 1)
+                cv2.putText(imgGray, 'Unoptimized Distance: {}mm'.format(depth_frame[y_mid, x_mid]), (450, 140),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255, 255, 255), 1)
                 if True:
-                    if distance > 500: 
-                        cv2.putText(imgGray, 'MOVE FORWARD'.format(distance), (500, 60),
+                    if distance > 400: 
+                        cv2.putText(imgGray, 'MOVE FORWARD'.format(distance), (450, 60),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
                     if x_mid < rectX:
-                        cv2.putText(imgGray, f'KEEP LEFT', (500, 80),
+                        cv2.putText(imgGray, f'KEEP LEFT', (450, 80),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), )
                         
                     elif x_mid > (rectX+deadZoneWidth):
-                        cv2.putText(imgGray, f'KEEP RIGHT', (500, 80),
+                        cv2.putText(imgGray, f'KEEP RIGHT', (450, 80),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                        
                 topRight = (int(topRight[0]), int(topRight[1]))
@@ -107,12 +120,12 @@ def main():
         # cv2.putText(imgGray, f'TODO: DEPTH CALCULATION FOR FORWARD PROPULSION',
         #             (900, 110), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
-        cv2.namedWindow("BGR", cv2.WINDOW_NORMAL)
+        # cv2.namedWindow("BGR", cv2.WINDOW_NORMAL)
         cv2.namedWindow("arUco", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('BGR', 640, 480)
+        # cv2.resizeWindow('BGR', 640, 480)
         cv2.resizeWindow('arUco', 640, 480)
-
-        cv2.imshow("BGR", img)
+        
+        # cv2.imshow("BGR", img)
         cv2.imshow("arUco", imgGray)
         key = cv2.waitKey(1)
         if key == 27 or key == ord('q'):
