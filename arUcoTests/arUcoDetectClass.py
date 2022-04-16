@@ -47,7 +47,7 @@ class FollowMe:
         self.angle = Slider(axis, 'Angle', 0, 100, 50)
         self.buttonAxis = plt.axes([0.81, 0.05, 0.1, 0.075])
         self.homeBtn = Button(buttonAxis,'Home')
-    
+        self.prevMode = 3
     def follow_me(self, move_callback, duty_cycle, distance_until_follow_me_on):
         ret, depth_frame, color_frame = self.dc.get_frame()
 
@@ -122,18 +122,25 @@ class FollowMe:
                 move_callback(-duty_cycle)
                 cv2.putText(imgGray, 'MOVE FORWARD'.format(distance), (450, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                
                 if x_mid < rectX:
                     cv2.putText(imgGray, f'KEEP LEFT', (450, 80),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), )
                     self.updateAngle(20)
+                    self.updateMode(2)
+
                 elif x_mid > (rectX+deadZoneWidth):
                     cv2.putText(imgGray, f'KEEP RIGHT', (450, 80),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     self.updateAngle(80)
+                    self.updateMode(0)
+
                 else: 
                     self.updateAngle(50)
+                    self.updateMode(1)
 
             else:
+                self.updateMode(3)
                 move_callback(0)
                 cv2.putText(imgGray, 'STOPPED'.format(distance), (450, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
@@ -156,6 +163,22 @@ class FollowMe:
     def close_follow_me(self):
         cv2.destroyAllWindows()
 
+    # red 0 
+    # blue 1
+    # green 2
+    def updateMode(self, mode):
+        data = []
+        data.append(2 & 0xFF)
+        data.append(mode & 0xFF)
+        if mode != self.prevMode:
+            toSend = bytearray(data)
+            turningMechanism.push(toSend)
+            turningMechanism.send()
+            print("Data being sent to REDBOARD: ",toSend)
+            print("prevMode: ", self.prevMode)
+            print("currMode:", mode)
+        self.prevMode = mode
+
     def updateAngle(self, angle1): 
         # print("update command sent", angle1)
 
@@ -173,13 +196,13 @@ class FollowMe:
         rate = 0
         data.append(int(rate) & 0xFF)
         if angle1 != self.previous:
-            print("data:",data)
+            # print("data:",data)
             toSend = bytearray(data)
-            print("bytearray:", toSend)
+            # print("bytearray:", toSend)
             turningMechanism.push(toSend)
-            print("b4", toSend)
+            # print("b4", toSend)
             turningMechanism.send()
-            print("after")
+            # print("after")
         self.previous = angle1
 
 """
