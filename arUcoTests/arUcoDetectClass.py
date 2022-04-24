@@ -4,14 +4,14 @@ import cv2
 import cv2.aruco as aruco
 import numpy as np
 import os
-import pyrealsense2
+# import pyrealsense2
 import sys
 from realsense_depth import *
 
 sys.path.insert(0, '../../turing-board-controls/src/Communication')
 
 from uart0Communication import *
-from commmunicate import SerialCommunication
+from communicate import SerialCommunication
 '''
 [[ 14.   7.]
  [ 94.   7.]
@@ -45,6 +45,7 @@ class FollowMe:
         # from uart0comms.py
         self.previous = 50
         self.prevMode = 3
+        
     def follow_me(self, move_callback, duty_cycle, distance_until_follow_me_on):
         ret, depth_frame, color_frame = self.dc.get_frame()
 
@@ -114,6 +115,8 @@ class FollowMe:
             
             if len(storage) > 0: 
                 distance = int(min(storage)) + 10
+            else: 
+                distance = 0
                        
             if distance > distance_until_follow_me_on:
                 move_callback(-duty_cycle)
@@ -134,7 +137,6 @@ class FollowMe:
                     self.updateAngle(50)
 
             else:
-                self.updateMode(3)
                 move_callback(0)
                 cv2.putText(imgGray, 'STOPPED'.format(distance), (450, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
@@ -157,22 +159,6 @@ class FollowMe:
     def close_follow_me(self):
         cv2.destroyAllWindows()
 
-    # red 0 
-    # blue 1
-    # green 2
-    def updateMode(self, mode):
-        data = []
-        data.append(2 & 0xFF)
-        data.append(mode & 0xFF)
-        if mode != self.prevMode:
-            toSend = bytearray(data)
-            self.turningMechanism.push(toSend)
-            self.turningMechanism.send()
-            print("Data being sent to REDBOARD: ",toSend)
-            print("prevMode: ", self.prevMode)
-            print("currMode:", mode)
-        self.prevMode = mode
-
     def updateAngle(self, angle1): 
         # print("update command sent", angle1)
 
@@ -193,9 +179,9 @@ class FollowMe:
             # print("data:",data)
             toSend = bytearray(data)
             # print("bytearray:", toSend)
-            turningMechanism.push(toSend)
+            self.turningMechanism.push(toSend)
             # print("b4", toSend)
-            turningMechanism.send()
+            self.turningMechanism.send()
             # print("after")
         self.previous = angle1
 
