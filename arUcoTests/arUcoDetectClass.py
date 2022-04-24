@@ -11,7 +11,7 @@ from realsense_depth import *
 sys.path.insert(0, '../../turing-board-controls/src/Communication')
 
 from uart0Communication import *
-
+from commmunicate import SerialCommunication
 '''
 [[ 14.   7.]
  [ 94.   7.]
@@ -44,9 +44,6 @@ class FollowMe:
 
         # from uart0comms.py
         self.previous = 50
-        self.angle = Slider(axis, 'Angle', 0, 100, 50)
-        self.buttonAxis = plt.axes([0.81, 0.05, 0.1, 0.075])
-        self.homeBtn = Button(buttonAxis,'Home')
         self.prevMode = 3
     def follow_me(self, move_callback, duty_cycle, distance_until_follow_me_on):
         ret, depth_frame, color_frame = self.dc.get_frame()
@@ -115,7 +112,7 @@ class FollowMe:
                 # aruco.drawAxis(img, self.camera_matrix,
                 #                self.camera_distortion, rvec, tvec, 10)
             
-            if storage != []: 
+            if len(storage) > 0: 
                 distance = int(min(storage)) + 10
                        
             if distance > distance_until_follow_me_on:
@@ -127,17 +124,14 @@ class FollowMe:
                     cv2.putText(imgGray, f'KEEP LEFT', (450, 80),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), )
                     self.updateAngle(20)
-                    self.updateMode(2)
 
                 elif x_mid > (rectX+deadZoneWidth):
                     cv2.putText(imgGray, f'KEEP RIGHT', (450, 80),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     self.updateAngle(80)
-                    self.updateMode(0)
 
                 else: 
                     self.updateAngle(50)
-                    self.updateMode(1)
 
             else:
                 self.updateMode(3)
@@ -172,8 +166,8 @@ class FollowMe:
         data.append(mode & 0xFF)
         if mode != self.prevMode:
             toSend = bytearray(data)
-            turningMechanism.push(toSend)
-            turningMechanism.send()
+            self.turningMechanism.push(toSend)
+            self.turningMechanism.send()
             print("Data being sent to REDBOARD: ",toSend)
             print("prevMode: ", self.prevMode)
             print("currMode:", mode)
