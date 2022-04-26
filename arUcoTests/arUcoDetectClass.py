@@ -102,7 +102,7 @@ class FollowMe:
                     
             if len(storage) > 0: 
                 distance = int(min(storage)) + 10
-            else: 
+            if len(corners) < 1: 
                 distance = 0
                        
             if distance > distance_until_follow_me_on:
@@ -112,13 +112,13 @@ class FollowMe:
                 if x_mid < rectX:
                     cv2.putText(imgGray, f'KEEP LEFT', (450, 80),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), )
-                    self.updateAngle(20, 0)
+                    self.updateAngle(20)
                 elif x_mid > (rectX+deadZoneWidth):
                     cv2.putText(imgGray, f'KEEP RIGHT', (450, 80),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                    self.updateAngle(80, 0)
+                    self.updateAngle(80)
                 else: 
-                    self.updateAngle(50, 0)
+                    self.updateAngle(50)
             else:
                 move_callback(0)
                 cv2.putText(imgGray, 'STOPPED'.format(distance), (450, 60),
@@ -131,21 +131,19 @@ class FollowMe:
     def close_follow_me(self):
         cv2.destroyAllWindows()
 
-    def updateAngle(self, angle, lock):
-        id = 3 & 0xFF
+    def updateAngle(self, angle):
+        id = 1 & 0xFF
         angle = int(angle) & 0xFF
         direction = 2 & 0xFF
         if angle > 50:
             direction = 1 & 0xFF
         elif angle < 50: 
             direction = 0 & 0xFF
-        lock = lock & 0xFF
+        lock = 0 & 0xFF
         data = [id, angle, direction, lock]
         if angle != self.previous:
-            print(data)
             toSend = bytearray(data)
             self.turningMechanism.push(toSend)
             self.turningMechanism.send()
-            print(toSend)
         self.previous = angle
 
