@@ -102,8 +102,6 @@ class FollowMe:
                     
             if len(storage) > 0: 
                 distance = int(min(storage)) + 10
-            if len(corners) < 1: 
-                distance = 0
                        
             if distance > distance_until_follow_me_on:
                 move_callback(-duty_cycle)
@@ -123,6 +121,8 @@ class FollowMe:
                 move_callback(0)
                 cv2.putText(imgGray, 'STOPPED'.format(distance), (450, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        else:
+            move_callback(0)
         cv2.namedWindow("arUco", cv2.WINDOW_NORMAL)
         cv2.resizeWindow('arUco', 640, 480)
         cv2.imshow("arUco", imgGray)
