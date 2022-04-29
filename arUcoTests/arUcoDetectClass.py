@@ -37,7 +37,7 @@ class FollowMe:
         # from uart0comms.py
         self.previous = 50
         self.prevMode = 3
-        
+        self.bufferCount = 0
     def follow_me(self, move_callback, duty_cycle, distance_until_follow_me_on):
         ret, depth_frame, color_frame = self.dc.get_frame()
 
@@ -120,9 +120,12 @@ class FollowMe:
             else:
                 move_callback(0)
                 cv2.putText(imgGray, 'STOPPED'.format(distance), (450, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
         else:
-            move_callback(0)
+            self.bufferCount += 1
+            if self.bufferCount == 60: # 60 frames is 2 seconds at 30fps.
+                move_callback(0)
+                self.bufferCount = 0
         cv2.namedWindow("arUco", cv2.WINDOW_NORMAL)
         cv2.resizeWindow('arUco', 640, 480)
         cv2.imshow("arUco", imgGray)
